@@ -1,4 +1,16 @@
-﻿using FastAutomationFrame.Diagram.Shapes;
+﻿//======================================================================
+//
+//        Copyright (C) 2020-2021 个人软件工作室    
+//        All rights reserved
+//
+//        filename :Form1.cs
+//        description :
+//
+//        created by 张恭亮 at  2020/9/22 10:55:28
+//
+//======================================================================
+
+using FastAutomationFrame.Diagram.Shapes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
