@@ -6,10 +6,11 @@
 //        filename :TextLabel.cs
 //        description :
 //
-//        created by 张恭亮 at  2020/9/22 10:55:28
+//        created by 张恭亮 at  2020/10/14 20:04:37
 //
 //======================================================================
 
+using FastAutomationFrame.Diagram;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,7 +19,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastAutomationFrame.Diagram.Shapes
+namespace BasicsShape
 {
 	public class TextLabel : ShapeBase
 	{
@@ -55,20 +56,6 @@ namespace FastAutomationFrame.Diagram.Shapes
 		#region Methods
 
 		/// <summary>
-		/// Tests whether the mouse hits this shape
-		/// </summary>
-		/// <param name="p"></param>
-		/// <returns></returns>
-		public override bool Hit(System.Drawing.Point p)
-		{
-			p.X = p.X - this.site.ViewOriginPoint.GetPoint().X;
-			p.Y = p.Y - this.site.ViewOriginPoint.GetPoint().Y;
-
-			Rectangle r = new Rectangle(p, new Size(5, 5));
-			return rectangle.Contains(r);
-		}
-
-		/// <summary>
 		/// Paints the shape on the canvas
 		/// </summary>
 		/// <param name="g"></param>
@@ -101,25 +88,12 @@ namespace FastAutomationFrame.Diagram.Shapes
 			}
 
 			if (text != string.Empty)
-				g.DrawString(text, font, Brushes.Black, rectangle.X + this.site.ViewOriginPoint.GetPoint().X + 10, rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y + 10);
-		}
-
-		/// <summary>
-		/// Invalidates the shape
-		/// </summary>
-		public override void Invalidate()
-		{
-			Rectangle r = rectangle;
-			r.X += this.site.ViewOriginPoint.GetPoint().X;
-			r.Y += this.site.ViewOriginPoint.GetPoint().Y;
-			r.Offset(-5, -5);
-			r.Inflate(20, 20);
-			site.Invalidate(r);
-		}
-		public override void Resize(int width, int height)
-		{
-			base.Resize(width, height);
-			Invalidate();
+			{
+				StringFormat stringFormat = new StringFormat();
+				stringFormat.LineAlignment = StringAlignment.Center;
+				stringFormat.Alignment = StringAlignment.Center;
+				g.DrawString(text, font, Brushes.Black, rectangle, stringFormat);
+			}
 		}
 
 		#endregion

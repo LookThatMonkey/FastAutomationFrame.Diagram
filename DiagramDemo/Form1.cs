@@ -10,7 +10,7 @@
 //
 //======================================================================
 
-using FastAutomationFrame.Diagram.Shapes;
+using BasicsShape;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

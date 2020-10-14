@@ -53,7 +53,7 @@ namespace FastAutomationFrame.Diagram
 
         #region Fields && Properties
 
-        protected bool showGrid = true;
+        protected bool showGrid = false;
         [Description("是否显示点网格"), Category("Layout")]
         public bool ShowGrid
         {
@@ -251,7 +251,7 @@ namespace FastAutomationFrame.Diagram
                     Connector con;
                     for (int k = 0; k < shapes.Count; k++)
                     {
-                        if ((con = shapes[k].HitConnector(p)) != null)
+                        if ((con = shapes[k].HitConnector(p, tracking)) != null)
                         {
                             con.AttachConnector((selectedEntity as Connector));
                             con.hovered = false;
@@ -276,7 +276,7 @@ namespace FastAutomationFrame.Diagram
                 {
                     for (int k = 0; k < shapes.Count; k++)
                     {
-                        shapes[k].HitConnector(e.Location);
+                        shapes[k].HitConnector(e.Location, tracking);
                     }
                 }
             }

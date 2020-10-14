@@ -42,10 +42,10 @@ namespace DiagramDemo
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
-            this.diagramControl1 = new FastAutomationFrame.Diagram.DiagramControl();
-            this.diagramToolBoxControl1 = new FastAutomationFrame.Diagram.DiagramToolBoxControl();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.diagramControl1 = new FastAutomationFrame.Diagram.DiagramControl();
+            this.diagramToolBoxControl1 = new FastAutomationFrame.Diagram.DiagramToolBoxControl();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,29 +64,6 @@ namespace DiagramDemo
             this.propertyGrid1.Size = new System.Drawing.Size(168, 450);
             this.propertyGrid1.TabIndex = 1;
             this.propertyGrid1.ViewForeColor = System.Drawing.Color.SlateGray;
-            // 
-            // diagramControl1
-            // 
-            this.diagramControl1.AllowDrop = true;
-            this.diagramControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.diagramControl1.LineColor = System.Drawing.Color.Silver;
-            this.diagramControl1.LineHoveredColor = System.Drawing.Color.Blue;
-            this.diagramControl1.LineSelectedColor = System.Drawing.Color.Green;
-            this.diagramControl1.Location = new System.Drawing.Point(200, 25);
-            this.diagramControl1.Name = "diagramControl1";
-            this.diagramControl1.ShowGrid = true;
-            this.diagramControl1.Size = new System.Drawing.Size(432, 425);
-            this.diagramControl1.TabIndex = 2;
-            this.diagramControl1.OnSelectElementChanged += new System.EventHandler<FastAutomationFrame.Diagram.SelectElementChangedEventArgs>(this.diagramControl1_OnSelectElementChanged);
-            // 
-            // diagramToolBoxControl1
-            // 
-            this.diagramToolBoxControl1.AutoScroll = true;
-            this.diagramToolBoxControl1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.diagramToolBoxControl1.Location = new System.Drawing.Point(0, 0);
-            this.diagramToolBoxControl1.Name = "diagramToolBoxControl1";
-            this.diagramToolBoxControl1.Size = new System.Drawing.Size(200, 450);
-            this.diagramToolBoxControl1.TabIndex = 0;
             // 
             // toolStrip1
             // 
@@ -107,6 +84,29 @@ namespace DiagramDemo
             this.toolStripButton1.Size = new System.Drawing.Size(60, 22);
             this.toolStripButton1.Text = "数据加载";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // diagramControl1
+            // 
+            this.diagramControl1.AllowDrop = true;
+            this.diagramControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.diagramControl1.LineColor = System.Drawing.Color.Silver;
+            this.diagramControl1.LineHoveredColor = System.Drawing.Color.Blue;
+            this.diagramControl1.LineSelectedColor = System.Drawing.Color.Green;
+            this.diagramControl1.Location = new System.Drawing.Point(200, 25);
+            this.diagramControl1.Name = "diagramControl1";
+            this.diagramControl1.ShowGrid = false;
+            this.diagramControl1.Size = new System.Drawing.Size(432, 425);
+            this.diagramControl1.TabIndex = 2;
+            this.diagramControl1.OnSelectElementChanged += new System.EventHandler<FastAutomationFrame.Diagram.SelectElementChangedEventArgs>(this.diagramControl1_OnSelectElementChanged);
+            // 
+            // diagramToolBoxControl1
+            // 
+            this.diagramToolBoxControl1.AutoScroll = true;
+            this.diagramToolBoxControl1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.diagramToolBoxControl1.Location = new System.Drawing.Point(0, 0);
+            this.diagramToolBoxControl1.Name = "diagramToolBoxControl1";
+            this.diagramToolBoxControl1.Size = new System.Drawing.Size(200, 450);
+            this.diagramToolBoxControl1.TabIndex = 0;
             // 
             // Form1
             // 

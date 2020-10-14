@@ -153,7 +153,7 @@ namespace FastAutomationFrame.Diagram
 		public override void Paint(Graphics g)
 		{
 			if (hovered && this.site != null)
-				g.FillRectangle(Brushes.Blue, point.X + this.site.ViewOriginPoint.GetPoint().X - 5, point.Y + this.site.ViewOriginPoint.GetPoint().Y - 5, 10, 10);
+				g.FillRectangle(Brushes.Cyan, point.X + this.site.ViewOriginPoint.GetPoint().X - 5, point.Y + this.site.ViewOriginPoint.GetPoint().Y - 5, 10, 10);
 			//else
 			//	g.FillRectangle(Brushes.Green, point.X + this.site.ViewOriginPoint.X - 2, point.Y + this.site.ViewOriginPoint.Y - 2, 4, 4);
 		}

@@ -42,8 +42,9 @@ namespace FastAutomationFrame.Diagram
         #endregion
 
         public ShapeBase Shape { get; set; }
+        public string DisplayText { get; set; }
 
-        public DiagramToolShapeItem(ShapeBase shape)
+        public DiagramToolShapeItem(ShapeBase shape, string displayText)
             : base()
         {
             shape.X = 0;
@@ -53,6 +54,7 @@ namespace FastAutomationFrame.Diagram
 
             base.Height = _height;
             Shape = shape;
+            DisplayText = displayText;
             this.Dock = DockStyle.Top;
         }
 
@@ -73,7 +75,7 @@ namespace FastAutomationFrame.Diagram
             if (Shape != null)
             {
                 Shape.Paint(e.Graphics);
-                e.Graphics.DrawString(Shape.ShapeName, font, Brushes.Black, _height + 10, 10);
+                e.Graphics.DrawString(DisplayText, font, Brushes.Black, _height + 10, 10);
             }
         }
     }

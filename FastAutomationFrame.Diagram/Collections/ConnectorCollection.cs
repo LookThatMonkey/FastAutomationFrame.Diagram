@@ -35,6 +35,11 @@ namespace FastAutomationFrame.Diagram.Collections
 			this.InnerList.Insert(index, con);
 		}
 
+		public bool Contains(object item)
+		{
+			return this.InnerList.Contains(item);
+		}
+
 		public Connector this[int index]
 		{
 			get
@@ -48,8 +53,8 @@ namespace FastAutomationFrame.Diagram.Collections
 			if (this.InnerList.Contains(c))
 			{
 				System.Diagnostics.Trace.WriteLine("yep, removed.");
+				this.InnerList.Remove(c);
 			}
-			this.InnerList.Remove(c);
 		}
 	}
 }
