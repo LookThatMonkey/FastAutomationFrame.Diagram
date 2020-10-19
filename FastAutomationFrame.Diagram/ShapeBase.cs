@@ -595,6 +595,7 @@ namespace FastAutomationFrame.Diagram
 				StringFormat stringFormat = new StringFormat();
 				stringFormat.LineAlignment = StringAlignment.Center;
 				stringFormat.Alignment = StringAlignment.Center;
+				Rectangle rectangle = new Rectangle(this.rectangle.X + point.X, this.rectangle.Y + point.Y, this.rectangle.Width, this.rectangle.Height);
 				g.DrawString(text, font, Brushes.Black, rectangle, stringFormat);
 			}
 		}
