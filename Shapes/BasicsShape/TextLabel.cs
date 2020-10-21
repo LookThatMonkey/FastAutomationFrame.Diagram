@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -61,30 +62,37 @@ namespace BasicsShape
 		/// <param name="g"></param>
 		public override void Paint(System.Drawing.Graphics g)
 		{
+			g.SmoothingMode = SmoothingMode.AntiAlias;
 			Brush brush = new SolidBrush(BackGroundColor);
 			g.FillRectangle(brush,
 					rectangle.X + this.site.ViewOriginPoint.GetPoint().X,
 					rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y,
-					rectangle.Width,
-					rectangle.Height);
+					this.Width,
+					this.Height);
 
 			if (hovered || isSelected)
 			{
 				Pen p = new Pen(BoderSelectedColor, 2F);
+				p.StartCap = LineCap.Round;
+				p.EndCap = LineCap.Round;
+				p.LineJoin = LineJoin.Round;
 				g.DrawRectangle(p,
 					rectangle.X + this.site.ViewOriginPoint.GetPoint().X,
 					rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y,
-					rectangle.Width,
-					rectangle.Height);
+					this.Width,
+					this.Height);
 			}
 			else if (ShowBorder)
 			{
 				Pen p = new Pen(BoderColor);
+				p.StartCap = LineCap.Round;
+				p.EndCap = LineCap.Round;
+				p.LineJoin = LineJoin.Round;
 				g.DrawRectangle(p,
 					rectangle.X + this.site.ViewOriginPoint.GetPoint().X,
 					rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y,
-					rectangle.Width,
-					rectangle.Height);
+					this.Width,
+					this.Height);
 			}
 
 			if (text != string.Empty)

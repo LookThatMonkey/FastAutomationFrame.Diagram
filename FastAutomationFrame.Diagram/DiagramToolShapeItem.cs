@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,11 +48,9 @@ namespace FastAutomationFrame.Diagram
         public DiagramToolShapeItem(ShapeBase shape, string displayText)
             : base()
         {
+            shape.Scale = shape.ToolBoxScale;
             shape.X = 0;
-            shape.Y = 0;
-            shape.Height = _height - 10;
-            shape.Width = _height - 10;
-
+            shape.Y = (_height - shape.Height) / 2;
             base.Height = _height;
             Shape = shape;
             DisplayText = displayText;
@@ -61,10 +60,10 @@ namespace FastAutomationFrame.Diagram
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            DragDropEffects dropEffect = this.DoDragDrop(new DragItem() 
-                {
-                    Shape = Shape 
-                },
+            DragDropEffects dropEffect = this.DoDragDrop(new DragItem()
+            {
+                Shape = Shape
+            },
                 DragDropEffects.Copy);
         }
 
@@ -74,6 +73,7 @@ namespace FastAutomationFrame.Diagram
 
             if (Shape != null)
             {
+                e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
                 Shape.Paint(e.Graphics);
                 e.Graphics.DrawString(DisplayText, font, Brushes.Black, _height + 10, 10);
             }

@@ -43,9 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Circle.cs" />
+    <Compile Include="Diamond.cs" />
     <Compile Include="OvalShape.cs" />
+    <Compile Include="Parallelogram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rapezoid.cs" />
+    <Compile Include="RoundRenctangle.cs" />
     <Compile Include="SimpleRectangle.cs" />
+    <Compile Include="Step.cs" />
     <Compile Include="TextLabel.cs" />
   </ItemGroup>
   <ItemGroup>

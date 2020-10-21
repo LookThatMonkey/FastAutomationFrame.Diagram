@@ -122,6 +122,10 @@ namespace FastAutomationFrame.Diagram
 
 		[Browsable(false)]
 		public virtual string ShapeName => "ShapeBase";
+
+		[Browsable(false)]
+		public virtual double ToolBoxScale => 0.4;
+
 		/// <summary>
 		/// Gets or sets the connectors of this shape
 		/// </summary>
@@ -132,13 +136,16 @@ namespace FastAutomationFrame.Diagram
 			set { connectors = value; }
 		}
 
+		[Browsable(false)]
+		public double Scale = 1;
+
 		/// <summary>
 		/// Gets or sets the width of the shape
 		/// </summary>
 		[Browsable(true), Description("宽度"), Category("Layout")]
 		public int Width
 		{
-			get { return this.rectangle.Width; }
+			get { return (int)(this.rectangle.Width * Scale); }
 			set { Resize(value, this.Height); }
 		}
 
@@ -148,7 +155,7 @@ namespace FastAutomationFrame.Diagram
 		[Browsable(true), Description("高度"), Category("Layout")]
 		public int Height
 		{
-			get { return this.rectangle.Height; }
+			get { return (int)(this.rectangle.Height * Scale); }
 			set { Resize(this.Width, value); }
 		}
 
@@ -174,7 +181,7 @@ namespace FastAutomationFrame.Diagram
 				Point p = new Point(value - rectangle.X, rectangle.Y);
 				this.Move(p);
 
-				if(Site != null)
+				if (Site != null)
 					Site.Invalidate(); //note that 'this.Invalidate()' will not be enough
 			}
 		}
