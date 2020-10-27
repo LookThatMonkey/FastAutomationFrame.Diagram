@@ -37,8 +37,8 @@ namespace BasicsShape
 
 		public SimpleRectangle() : base()
 		{
-			rectangle.Width = 100;
-			rectangle.Height = 33;
+			this.Width = 100;
+			this.Height = 33;
 		}
 
 		/// <summary>
@@ -58,41 +58,53 @@ namespace BasicsShape
 		/// <param name="g"></param>
 		public override void Paint(System.Drawing.Graphics g)
 		{
+			if (this.HideItem) return;
 			g.SmoothingMode = SmoothingMode.AntiAlias;
 			Point point = new Point(0, 0);
 			if (this.site != null)
 				point = this.site.ViewOriginPoint.GetPoint();
 
-			Brush brush = new SolidBrush(BackGroundColor);
-			g.FillRectangle(brush,
-					rectangle.X + point.X,
-					rectangle.Y + point.Y,
-					this.Width,
-					this.Height);
+			if (Image != null)
+			{
+				g.DrawImage(Image,
+						rectangle.X + point.X,
+						rectangle.Y + point.Y,
+						rectangle.Width,
+						rectangle.Height); //在窗口的画布中绘画出内存中的图像
+			}
+			else
+			{
+				Brush brush = new SolidBrush(BackGroundColor);
+				g.FillRectangle(brush,
+						rectangle.X + point.X,
+						rectangle.Y + point.Y,
+						rectangle.Width,
+						rectangle.Height);
+			}
 
 			if (hovered || isSelected)
 			{
-				Pen p = new Pen(BoderSelectedColor, 2F);
+				Pen p = new Pen(BorderSelectedColor, 2F);
 				p.StartCap = LineCap.Round;
 				p.EndCap = LineCap.Round;
 				p.LineJoin = LineJoin.Round;
 				g.DrawRectangle(p,
 					rectangle.X + point.X,
 					rectangle.Y + point.Y,
-					this.Width,
-					this.Height);
+					rectangle.Width,
+					rectangle.Height);
 			}
 			else if (ShowBorder)
 			{
-				Pen p = new Pen(BoderColor);
+				Pen p = new Pen(BorderColor);
 				p.StartCap = LineCap.Round;
 				p.EndCap = LineCap.Round;
 				p.LineJoin = LineJoin.Round;
 				g.DrawRectangle(p,
 					rectangle.X + point.X,
 					rectangle.Y + point.Y,
-					this.Width,
-					this.Height);
+					rectangle.Width,
+					rectangle.Height);
 			}
 
 			base.Paint(g);

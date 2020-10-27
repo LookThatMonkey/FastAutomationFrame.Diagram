@@ -1,0 +1,16 @@
+E:\code\FastAutomationFrame\FastAutomationFrame.Diagram\bin\Debug\FastAutomationFrame.Diagram.dll
+E:\code\FastAutomationFrame\FastAutomationFrame.Diagram\bin\Debug\FastAutomationFrame.Diagram.pdb
+E:\code\FastAutomationFrame\FastAutomationFrame.MainApplication\bin\Debug\FastAutomationFrame.Diagram.dll
+E:\code\FastAutomationFrame\FastAutomationFrame.MainApplication\bin\Debug\FastAutomationFrame.Diagram.pdb
+E:\code\FastAutomationFrame\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.csproj.CoreCompileInputs.cache
+E:\code\FastAutomationFrame\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.dll
+E:\code\FastAutomationFrame\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.pdb
+E:\code\FastAutomationFrame\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.csprojAssemblyReference.cache
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.MainApplication\bin\Debug\FastAutomationFrame.Diagram.dll
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.MainApplication\bin\Debug\FastAutomationFrame.Diagram.pdb
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.csproj.CoreCompileInputs.cache
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.dll
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.pdb
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.csprojAssemblyReference.cache
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.PropertyGrid.Form1.resources
+E:\code\FastAutomationFrame\Diagram\FastAutomationFrame.Diagram\obj\Debug\FastAutomationFrame.Diagram.csproj.GenerateResource.cache

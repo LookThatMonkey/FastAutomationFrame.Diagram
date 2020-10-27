@@ -1,0 +1,8 @@
+E:\code\FastAutomationFrame\Diagram\DiagramDemo\bin\Debug\DiagromShapes\CustomerShape.dll
+E:\code\FastAutomationFrame\Diagram\DiagramDemo\bin\Debug\DiagromShapes\CustomerShape.pdb
+E:\code\FastAutomationFrame\Diagram\CustomerShape\obj\Debug\CustomerShape.csprojAssemblyReference.cache
+E:\code\FastAutomationFrame\Diagram\CustomerShape\obj\Debug\CustomerShape.Properties.Resources.resources
+E:\code\FastAutomationFrame\Diagram\CustomerShape\obj\Debug\CustomerShape.csproj.GenerateResource.cache
+E:\code\FastAutomationFrame\Diagram\CustomerShape\obj\Debug\CustomerShape.csproj.CoreCompileInputs.cache
+E:\code\FastAutomationFrame\Diagram\CustomerShape\obj\Debug\CustomerShape.dll
+E:\code\FastAutomationFrame\Diagram\CustomerShape\obj\Debug\CustomerShape.pdb

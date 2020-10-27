@@ -1,16 +1,4 @@
-﻿//======================================================================
-//
-//        Copyright (C) 2020-2021 个人软件工作室    
-//        All rights reserved
-//
-//        filename :ConnectorCollection.cs
-//        description :
-//
-//        created by 张恭亮 at  2020/9/22 10:55:28
-//
-//======================================================================
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,11 +23,6 @@ namespace FastAutomationFrame.Diagram.Collections
 			this.InnerList.Insert(index, con);
 		}
 
-		public bool Contains(object item)
-		{
-			return this.InnerList.Contains(item);
-		}
-
 		public Connector this[int index]
 		{
 			get
@@ -53,8 +36,8 @@ namespace FastAutomationFrame.Diagram.Collections
 			if (this.InnerList.Contains(c))
 			{
 				System.Diagnostics.Trace.WriteLine("yep, removed.");
-				this.InnerList.Remove(c);
 			}
+			this.InnerList.Remove(c);
 		}
 	}
 }

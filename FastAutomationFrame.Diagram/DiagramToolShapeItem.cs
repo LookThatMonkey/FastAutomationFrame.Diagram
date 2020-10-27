@@ -1,16 +1,4 @@
-﻿//======================================================================
-//
-//        Copyright (C) 2020-2021 个人软件工作室    
-//        All rights reserved
-//
-//        filename :DiagramToolShapeItem.cs
-//        description :
-//
-//        created by 张恭亮 at  2020/9/22 10:55:28
-//
-//======================================================================
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -48,9 +36,10 @@ namespace FastAutomationFrame.Diagram
         public DiagramToolShapeItem(ShapeBase shape, string displayText)
             : base()
         {
+            shape.Text = "";
             shape.Scale = shape.ToolBoxScale;
-            shape.X = 0;
-            shape.Y = (_height - shape.Height) / 2;
+            shape.X = 5;
+            shape.Y = (_height - shape.Height) / 2 + 10;
             base.Height = _height;
             Shape = shape;
             DisplayText = displayText;

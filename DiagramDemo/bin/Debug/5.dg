@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<SaveDataInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ViewOriginPoint>
+    <X>0</X>
+    <Y>0</Y>
+  </ViewOriginPoint>
+  <LineHoveredColorARGB>-16776961</LineHoveredColorARGB>
+  <LineSelectedColorARGB>-16744448</LineSelectedColorARGB>
+  <LineColorARGB>-4144960</LineColorARGB>
+  <BackColorARGB>-986896</BackColorARGB>
+  <ShowGrid>false</ShowGrid>
+  <Shapes>
+    <SaveShape>
+      <AssemblyInfo>CustomerShape, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</AssemblyInfo>
+      <Type>CustomerShape.Image2</Type>
+      <ObjectID>3295ca4e-23c7-47e8-81dd-bac5f1699b3f</ObjectID>
+      <X>161</X>
+      <Y>126</Y>
+      <Text>图片测试2</Text>
+      <ImageBase64 />
+      <BackGroundColorARGB>-1</BackGroundColorARGB>
+      <BorderColorARGB>-16777216</BorderColorARGB>
+      <BorderSelectedColorARGB>-5374161</BorderSelectedColorARGB>
+      <EnableBottomSourceConnector>true</EnableBottomSourceConnector>
+      <EnableLeftSourceConnector>true</EnableLeftSourceConnector>
+      <EnableRightSourceConnector>true</EnableRightSourceConnector>
+      <EnableTopSourceConnector>true</EnableTopSourceConnector>
+      <EnableBottomTargetConnector>true</EnableBottomTargetConnector>
+      <EnableLeftTargetConnector>true</EnableLeftTargetConnector>
+      <EnableRightTargetConnector>true</EnableRightTargetConnector>
+      <EnableTopTargetConnector>true</EnableTopTargetConnector>
+      <ShowBorder>true</ShowBorder>
+    </SaveShape>
+  </Shapes>
+  <Connections />
+<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" /><SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" /><DigestValue>xhriJo8nFjd/AwnjUZismrh7TBT4nIjlkyr+czU9qQs=</DigestValue></Reference></SignedInfo><SignatureValue>sWBSd7hrGln1KiNff5QAlaYvnteEC4I3ettgj4eKUOhd0/sI9J/OrYBjZrr4OhegcqiZ8mrqMHfjvt4y0lFrwTCNGSLvIic3bI8eqQC5KpZ5BuBflEUK5FDLIGldIc1RK+NJE3P6JyosUoKHHcY941pR2UAlGXryGBWxCsHJ68Y=</SignatureValue></Signature></SaveDataInfo>

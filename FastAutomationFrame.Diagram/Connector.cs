@@ -13,6 +13,7 @@
 using FastAutomationFrame.Diagram.Collections;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,10 @@ namespace FastAutomationFrame.Diagram
 	{
 		public Connector New { get; set; }
 	}
-	
+
+	/// <summary>
+	/// 连接点.
+	/// </summary>
 	public class Connector : Entity
 	{
 
@@ -38,13 +42,13 @@ namespace FastAutomationFrame.Diagram
 		public event EventHandler<LocationEventArgs> LocationChanged;
 		private void OnLocationChanged(LocationEventArgs e)
 		{
-            LocationChanged?.Invoke(this, e);
-        }
+			LocationChanged?.Invoke(this, e);
+		}
 		public event EventHandler<AttachedToChangedEventArgs> AttachedToChanged;
 		private void OnAttachedToChanged(AttachedToChangedEventArgs e)
 		{
-            AttachedToChanged?.Invoke(this, e);
-        }
+			AttachedToChanged?.Invoke(this, e);
+		}
 
 		#endregion
 
@@ -69,6 +73,12 @@ namespace FastAutomationFrame.Diagram
 
 		#region Properties
 
+		public ConnectorCollection AttachedConnectors => attachedConnectors;
+
+		public Entity ContainEntity { get; set; }
+
+		public int ConnectorsIndexOfContainEntity { get; set; } = -1;
+
 		/// <summary>
 		/// The name of this connector
 		/// </summary>
@@ -77,6 +87,20 @@ namespace FastAutomationFrame.Diagram
 			get { return name; }
 			set { name = value; }
 		}
+
+		[Browsable(false)]
+		public string OwnerID { get; set; }
+
+		private int _offset = 0;
+		[Browsable(false)]
+		public int Offset
+		{
+			get { return _offset; }
+			set { _offset = value; }
+		}
+
+		[Browsable(false)]
+		public int Index { get; set; } = 0;
 
 		private ConnectorDirection? _connectorDirection = null;
 		public ConnectorDirection ConnectorDirection
@@ -105,7 +129,8 @@ namespace FastAutomationFrame.Diagram
 		public Connector AttachedTo
 		{
 			get { return attachedTo; }
-			set { 
+			set
+			{
 				attachedTo = value;
 				point = attachedTo.point.Copy();
 				_connectorDirection = attachedTo.ConnectorDirection;
@@ -119,8 +144,19 @@ namespace FastAutomationFrame.Diagram
 		public DiagramPoint Point
 		{
 			get { return point; }
-			set { point = value; if (_connectorDirection != null) point.ConnectorDirection = (ConnectorDirection)_connectorDirection; }
+			set 
+			{ 
+				point = value;
+				if (_connectorDirection != null)
+				{
+					point.ConnectorDirection = (ConnectorDirection)_connectorDirection;
+				}
+			}
 		}
+
+		public int X => point.X;
+
+		public int Y => point.Y + Offset;
 
 		#endregion
 
@@ -140,7 +176,7 @@ namespace FastAutomationFrame.Diagram
 		public Connector(DiagramPoint p)
 		{
 			attachedConnectors = new ConnectorCollection();
-			Point = p;
+			Point = new DiagramPoint(p.X, p.Y);
 		}
 
 		#endregion

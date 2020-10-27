@@ -6,7 +6,7 @@
 //        filename :Step.cs
 //        description :
 //
-//        created by 张恭亮 at  2020/10/21 17:05:23
+//        created by 张恭亮 at  2020/10/21 15:58:53
 //
 //======================================================================
 
@@ -52,8 +52,8 @@ namespace BasicsShape
 
 		public Step() : base()
 		{
-			rectangle.Width = 100;
-			rectangle.Height = 33;
+			this.Width = 100;
+			this.Height = 33;
 		}
 
 		/// <summary>
@@ -73,27 +73,39 @@ namespace BasicsShape
 		/// <param name="g"></param>
 		public override void Paint(System.Drawing.Graphics g)
 		{
+			if (this.HideItem) return;
 			g.SmoothingMode = SmoothingMode.AntiAlias;
 			Point point = new Point(0, 0);
 			if (this.site != null)
 				point = this.site.ViewOriginPoint.GetPoint();
 
 			Brush brush = new SolidBrush(BackGroundColor);
-			Rectangle rect = new Rectangle(rectangle.X + point.X, rectangle.Y + point.Y, this.Width, this.Height);
+			Rectangle rect = new Rectangle(rectangle.X + point.X, rectangle.Y + point.Y, rectangle.Width, rectangle.Height);
 			List<PointF> points = new List<PointF>();
-			points.Add(new PointF(rectangle.X + point.X + (int)(_offset * Scale), rectangle.Y + point.Y + this.Height / 2));
+			points.Add(new PointF(rectangle.X + point.X + (int)(_offset * Scale), rectangle.Y + point.Y + rectangle.Height / 2));
 			points.Add(new PointF(rectangle.X + point.X, rectangle.Y + point.Y));
-			points.Add(new PointF(rectangle.X + point.X + this.Width - (int)(_offset * Scale), rectangle.Y + point.Y));
-			points.Add(new PointF(rectangle.X + point.X + this.Width, rectangle.Y + point.Y + this.Height / 2));
-			points.Add(new PointF(rectangle.X + point.X + this.Width - (int)(_offset * Scale), rectangle.Y + point.Y + this.Height));
-			points.Add(new PointF(rectangle.X + point.X, rectangle.Y + point.Y + this.Height));
+			points.Add(new PointF(rectangle.X + point.X + rectangle.Width - (int)(_offset * Scale), rectangle.Y + point.Y));
+			points.Add(new PointF(rectangle.X + point.X + rectangle.Width, rectangle.Y + point.Y + rectangle.Height / 2));
+			points.Add(new PointF(rectangle.X + point.X + rectangle.Width - (int)(_offset * Scale), rectangle.Y + point.Y + rectangle.Height));
+			points.Add(new PointF(rectangle.X + point.X, rectangle.Y + point.Y + rectangle.Height));
 			using (GraphicsPath graphicsPath = CreateRoundedRectanglePath(points))
 			{
-				g.FillPath(brush, graphicsPath);
+				if (Image != null)
+				{
+					g.DrawImage(Image,
+							rectangle.X + point.X,
+							rectangle.Y + point.Y,
+							rectangle.Width,
+							rectangle.Height); //在窗口的画布中绘画出内存中的图像
+				}
+				else
+				{
+					g.FillPath(brush, graphicsPath);
+				}
 
 				if (hovered || isSelected)
 				{
-					Pen p = new Pen(BoderSelectedColor, 2F);
+					Pen p = new Pen(BorderSelectedColor, 2F);
 					p.StartCap = LineCap.Round;
 					p.EndCap = LineCap.Round;
 					p.LineJoin = LineJoin.Round;
@@ -101,7 +113,7 @@ namespace BasicsShape
 				}
 				else if (ShowBorder)
 				{
-					Pen p = new Pen(BoderColor);
+					Pen p = new Pen(BorderColor);
 					p.StartCap = LineCap.Round;
 					p.EndCap = LineCap.Round;
 					p.LineJoin = LineJoin.Round;

@@ -1,26 +1,15 @@
-﻿//======================================================================
-//
-//        Copyright (C) 2020-2021 个人软件工作室    
-//        All rights reserved
-//
-//        filename :Entity.cs
-//        description :
-//
-//        created by 张恭亮 at  2020/9/22 10:55:28
-//
-//======================================================================
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace FastAutomationFrame.Diagram
 {
-	public abstract class Entity
+	public abstract class Entity : IDisposable
 	{
 		#region Fields
 		/// <summary>
@@ -39,16 +28,24 @@ namespace FastAutomationFrame.Diagram
 		/// <summary>
 		/// Default font for drawing text
 		/// </summary>
-		protected Font font = new Font("Verdana", 10F);
+		protected Font font = new Font("微软雅黑", 8F);
 
 		/// <summary>
 		/// Default black pen
 		/// </summary>
 		protected Pen blackPen = new Pen(Brushes.Black, 1F);
 
+		/// <summary>
+		/// 隐藏节点
+		/// </summary>
+		public bool HideItem = false;
+
 		#endregion
 
 		#region Properties
+
+		[Browsable(false)]
+		public string ObjectID { get; set; } = Guid.NewGuid().ToString();
 
 		/// <summary>
 		/// Gets or sets whether the entity is selected
@@ -63,6 +60,7 @@ namespace FastAutomationFrame.Diagram
 		/// Gets or sets the site of the entity
 		/// </summary>
 		[Browsable(false)]
+		[XmlIgnore]
 		public DiagramControl Site
 		{
 			get 
@@ -125,6 +123,10 @@ namespace FastAutomationFrame.Diagram
 		/// <param name="p">the shifting vector, not an absolute position!</param>
 		public abstract void Move(Point p);
 
-		#endregion
-	}
+        public void Dispose()
+        {
+        }
+
+        #endregion
+    }
 }

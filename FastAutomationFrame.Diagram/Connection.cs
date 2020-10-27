@@ -1,16 +1,4 @@
-﻿//======================================================================
-//
-//        Copyright (C) 2020-2021 个人软件工作室    
-//        All rights reserved
-//
-//        filename :Connection.cs
-//        description :
-//
-//        created by 张恭亮 at  2020/9/22 10:55:28
-//
-//======================================================================
-
-using FastAutomationFrame.Diagram.Collections;
+﻿using FastAutomationFrame.Diagram.Collections;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace FastAutomationFrame.Diagram
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class Connection : Entity
 	{
 		#region Fields
@@ -38,11 +29,13 @@ namespace FastAutomationFrame.Diagram
 			{ 
 				return from;
 			}
-			set
+			private set
 			{ 
 				from = value;
 				if (site != null)
 					from.Site = site;
+
+				from.ContainEntity = this;
 			}
 		}
 
@@ -54,11 +47,13 @@ namespace FastAutomationFrame.Diagram
 			{
 				return to;
 			}
-			set
+			private set
 			{
 				to = value;
 				if (site != null)
 					to.Site = site;
+
+				to.ContainEntity = this;
 			}
 		}
 
@@ -147,12 +142,14 @@ namespace FastAutomationFrame.Diagram
 
 			this.from = new Connector(from.Copy());
 			this.from.Name = "From";
-            this.from.LocationChanged += Connector_LocationChanged;
+			this.from.ContainEntity = this;
+			this.from.LocationChanged += Connector_LocationChanged;
 			connector1 = this.from;
 			Connectors.Add(connector1);
 
 			this.to = new Connector(to.Copy());
 			this.To.Name = "To";
+			this.to.ContainEntity = this;
 			connector2 = this.to;
 			this.to.LocationChanged += Connector_LocationChanged;
 			this.To.AttachedToChanged += To_AttachedToChanged;
@@ -168,7 +165,7 @@ namespace FastAutomationFrame.Diagram
 		{
 			InitialPath();
 		}
-        private void InitialPath()
+		internal void InitialPath()
 		{
 			Connector connector1 = this.from, connector2 = this.to;
 			int x = 0, y = 0;
@@ -179,28 +176,28 @@ namespace FastAutomationFrame.Diagram
 
 			if (connector1.ConnectorDirection == ConnectorDirection.Down && connector2.ConnectorDirection == ConnectorDirection.Up)
 			{
-				if (connector1.Point.Y < connector2.Point.Y && connector1.Point.X != connector2.Point.X)
+				if (connector1.Y < connector2.Y && connector1.X != connector2.X)
 				{
-					x = connector1.Point.X;
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					x = connector1.X;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if(connector1.Point.Y >= connector2.Point.Y)
+				else if(connector1.Y >= connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y + 10;
+					x = connector1.X;
+					y = connector1.Y + 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = (connector1.Point.X + connector2.Point.X) / 2;
+					x = (connector1.X + connector2.X) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y -= 30 + connector1.Point.Y - connector2.Point.Y;
+					y -= 30 + connector1.Y - connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -211,34 +208,34 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Down && connector2.ConnectorDirection == ConnectorDirection.Left)
 			{
-				if (connector1.Point.Y < connector2.Point.Y && connector1.Point.X >= connector2.Point.X)
+				if (connector1.Y < connector2.Y && connector1.X >= connector2.X)
 				{
-					x = connector1.Point.X;
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					x = connector1.X;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X - 20;
+					x = connector2.X - 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y < connector2.Point.Y)
+				else if (connector1.Y < connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = connector2.Point.Y;
+					x = connector1.X;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.X != connector2.Point.X)
+				else if (connector1.X != connector2.X)
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y + 10;
+					x = connector1.X;
+					y = connector1.Y + 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X - 20;
+					x = connector2.X - 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -249,34 +246,34 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Down && connector2.ConnectorDirection == ConnectorDirection.Right)
 			{
-				if (connector1.Point.Y < connector2.Point.Y && connector1.Point.X <= connector2.Point.X)
+				if (connector1.Y < connector2.Y && connector1.X <= connector2.X)
 				{
-					x = connector1.Point.X;
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					x = connector1.X;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X + 20;
+					x = connector2.X + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y < connector2.Point.Y)
+				else if (connector1.Y < connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = connector2.Point.Y;
+					x = connector1.X;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.X != connector2.Point.X)
+				else if (connector1.X != connector2.X)
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y + 10;
+					x = connector1.X;
+					y = connector1.Y + 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X + 20;
+					x = connector2.X + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -287,52 +284,52 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Down && connector2.ConnectorDirection == ConnectorDirection.Down)
 			{
-				if (connector1.Point.Y < connector2.Point.Y && connector1.Point.X != connector2.Point.X)
+				if (connector1.Y < connector2.Y && connector1.X != connector2.X)
 				{
-					x = connector1.Point.X;
-					y = connector2.Point.Y + 20;
+					x = connector1.X;
+					y = connector2.Y + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y < connector2.Point.Y)
+				else if (connector1.Y < connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					x = connector1.X;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X + 20;
+					x = connector2.X + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y + 20;
+					y = connector2.Y + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.X != connector2.Point.X)
+				else if (connector1.X != connector2.X)
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y + 10;
+					x = connector1.X;
+					y = connector1.Y + 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 				else
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y + 10;
+					x = connector1.X;
+					y = connector1.Y + 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector1.Point.X + 20;
+					x = connector1.X + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y -= 10 + (connector1.Point.Y - connector2.Point.Y) / 2;
+					y -= 10 + (connector1.Y - connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -343,34 +340,34 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Right && connector2.ConnectorDirection == ConnectorDirection.Up)
 			{
-				if (connector1.Point.Y < connector2.Point.Y && connector1.Point.X + 10 >= connector2.Point.X)
+				if (connector1.Y < connector2.Y && connector1.X + 10 >= connector2.X)
 				{
-					x = connector1.Point.X + 10;
-					y = connector1.Point.Y;
+					x = connector1.X + 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y < connector2.Point.Y)
+				else if (connector1.Y < connector2.Y)
 				{
-					x = connector2.Point.X;
-					y = connector1.Point.Y;
+					x = connector2.X;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 				else
 				{
-					x = connector1.Point.X + 10;
-					y = connector1.Point.Y;
+					x = connector1.X + 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y - 20;
+					y = connector2.Y - 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -381,11 +378,11 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Right && connector2.ConnectorDirection == ConnectorDirection.Right)
 			{
-				x = Math.Max(connector1.Point.X + 10, connector2.Point.X + 20);
-				y = connector1.Point.Y;
+				x = Math.Max(connector1.X + 10, connector2.X + 20);
+				y = connector1.Y;
 				connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-				y = connector2.Point.Y;
+				y = connector2.Y;
 				connectors.Add(new Connector(new DiagramPoint(x, y)));
 			}
 
@@ -395,46 +392,46 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Right && connector2.ConnectorDirection == ConnectorDirection.Down)
 			{
-				if (connector1.Point.Y < connector2.Point.Y)
+				if (connector1.Y < connector2.Y)
 				{
-					x = connector1.Point.X + 10;
-					y = connector1.Point.Y;
+					x = connector1.X + 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y + 20;
+					y = connector2.Y + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y == connector2.Point.Y)
+				else if (connector1.Y == connector2.Y)
 				{
-					x = connector1.Point.X + 10;
-					y = connector1.Point.Y;
+					x = connector1.X + 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector1.Point.Y + 20;
+					y = connector1.Y + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.X + 10 < connector2.Point.X)
+				else if (connector1.X + 10 < connector2.X)
 				{
-					x = connector2.Point.X;
-					y = connector1.Point.Y;
+					x = connector2.X;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 				else
 				{
-					x = connector1.Point.X + 10;
-					y = connector1.Point.Y;
+					x = connector1.X + 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -445,28 +442,28 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Right && connector2.ConnectorDirection == ConnectorDirection.Left)
 			{
-				if (connector1.Point.X + 10 >= connector2.Point.X)
+				if (connector1.X + 10 >= connector2.X)
 				{
-					x = connector1.Point.X + 10;
-					y = connector1.Point.Y;
+					x = connector1.X + 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X - 20;
+					x = connector2.X - 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 				else
 				{
-					x = connector1.Point.X + 10;
-					y = connector1.Point.Y;
+					x = connector1.X + 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -477,11 +474,11 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Up && connector2.ConnectorDirection == ConnectorDirection.Up)
 			{
-				x = connector1.Point.X;
-				y = Math.Min(connector1.Point.Y - 10, connector2.Point.Y - 20);
+				x = connector1.X;
+				y = Math.Min(connector1.Y - 10, connector2.Y - 20);
 				connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-				x = connector2.Point.X;
+				x = connector2.X;
 				connectors.Add(new Connector(new DiagramPoint(x, y)));
 			}
 
@@ -491,34 +488,34 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Up && connector2.ConnectorDirection == ConnectorDirection.Right)
 			{
-				if (connector1.Point.Y > connector2.Point.Y && connector1.Point.X > connector2.Point.X)
+				if (connector1.Y > connector2.Y && connector1.X > connector2.X)
 				{
-					x = connector1.Point.X;
-					y = connector2.Point.Y;
+					x = connector1.X;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y > connector2.Point.Y)
+				else if (connector1.Y > connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					x = connector1.X;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X + 20;
+					x = connector2.X + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y <= connector2.Point.Y)
+				else if (connector1.Y <= connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y - 10;
+					x = connector1.X;
+					y = connector1.Y - 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X + 20;
+					x = connector2.X + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -529,28 +526,28 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Up && connector2.ConnectorDirection == ConnectorDirection.Down)
 			{
-				if (connector1.Point.Y > connector2.Point.Y && connector1.Point.X != connector2.Point.X)
+				if (connector1.Y > connector2.Y && connector1.X != connector2.X)
 				{
-					x = connector1.Point.X;
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					x = connector1.X;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y < connector2.Point.Y && connector1.Point.X != connector2.Point.X)
+				else if (connector1.Y < connector2.Y && connector1.X != connector2.X)
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y - 10;
+					x = connector1.X;
+					y = connector1.Y - 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = (connector1.Point.X + connector2.Point.X) / 2;
+					x = (connector1.X + connector2.X) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y + 20;
+					y = connector2.Y + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -561,34 +558,34 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Up && connector2.ConnectorDirection == ConnectorDirection.Left)
 			{
-				if (connector1.Point.Y > connector2.Point.Y && connector1.Point.X < connector2.Point.X)
+				if (connector1.Y > connector2.Y && connector1.X < connector2.X)
 				{
-					x = connector1.Point.X;
-					y = connector2.Point.Y;
+					x = connector1.X;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y > connector2.Point.Y)
+				else if (connector1.Y > connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					x = connector1.X;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X - 20;
+					x = connector2.X - 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y <= connector2.Point.Y)
+				else if (connector1.Y <= connector2.Y)
 				{
-					x = connector1.Point.X;
-					y = connector1.Point.Y - 10;
+					x = connector1.X;
+					y = connector1.Y - 10;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X - 20;
+					x = connector2.X - 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -599,34 +596,34 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Left && connector2.ConnectorDirection == ConnectorDirection.Up)
 			{
-				if (connector1.Point.Y < connector2.Point.Y && connector1.Point.X - 10 >= connector2.Point.X)
+				if (connector1.Y < connector2.Y && connector1.X - 10 >= connector2.X)
 				{
-					x = connector2.Point.X;
-					y = connector1.Point.Y;
+					x = connector2.X;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if (connector1.Point.Y < connector2.Point.Y)
+				else if (connector1.Y < connector2.Y)
 				{
-					x = connector1.Point.X - 10;
-					y = connector1.Point.Y;
+					x = connector1.X - 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if(connector1.Point.Y > connector2.Point.Y)
+				else if(connector1.Y > connector2.Y)
 				{
-					x = connector1.Point.X - 10;
-					y = connector1.Point.Y;
+					x = connector1.X - 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y - 20;
+					y = connector2.Y - 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -637,28 +634,28 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Left && connector2.ConnectorDirection == ConnectorDirection.Right)
 			{
-				if (connector1.Point.X - 10 >= connector2.Point.X)
+				if (connector1.X - 10 >= connector2.X)
 				{
-					x = (connector1.Point.X + connector2.Point.X) / 2;
-					y = connector1.Point.Y;
+					x = (connector1.X + connector2.X) / 2;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 				else
 				{
-					x = connector1.Point.X - 10;
-					y = connector1.Point.Y;
+					x = connector1.X - 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = (connector1.Point.Y + connector2.Point.Y) / 2;
+					y = (connector1.Y + connector2.Y) / 2;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X + 20;
+					x = connector2.X + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y;
+					y = connector2.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -669,22 +666,22 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Left && connector2.ConnectorDirection == ConnectorDirection.Down)
 			{
-				if (connector1.Point.Y > connector2.Point.Y && connector1.Point.X > connector2.Point.X)
+				if (connector1.Y > connector2.Y && connector1.X > connector2.X)
 				{
-					x = connector2.Point.X;
-					y = connector1.Point.Y;
+					x = connector2.X;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
-				else if(connector1.Point.X != connector2.Point.X)
+				else if(connector1.X != connector2.X)
 				{
-					x = connector1.Point.X - 10;
-					y = connector1.Point.Y;
+					x = connector1.X - 10;
+					y = connector1.Y;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					y = connector2.Point.Y + 20;
+					y = connector2.Y + 20;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-					x = connector2.Point.X;
+					x = connector2.X;
 					connectors.Add(new Connector(new DiagramPoint(x, y)));
 				}
 			}
@@ -695,11 +692,11 @@ namespace FastAutomationFrame.Diagram
 
 			else if (connector1.ConnectorDirection == ConnectorDirection.Left && connector2.ConnectorDirection == ConnectorDirection.Left)
 			{
-				x = Math.Min(connector1.Point.X - 10, connector2.Point.X - 20);
-				y = connector1.Point.Y;
+				x = Math.Min(connector1.X - 10, connector2.X - 20);
+				y = connector1.Y;
 				connectors.Add(new Connector(new DiagramPoint(x, y)));
 
-				y = connector2.Point.Y;
+				y = connector2.Y;
 				connectors.Add(new Connector(new DiagramPoint(x, y)));
 			}
 
@@ -727,36 +724,38 @@ namespace FastAutomationFrame.Diagram
 		/// <param name="g"></param>
 		public override void Paint(System.Drawing.Graphics g)
 		{
+			if (this.HideItem) return;
 			Pen p = new Pen(UseBackColor ? this.Color : this.site.LineColor);
+			p.Width = this.site.LineWidth;
 			if (isSelected)
 			{
 				p.Color = UseBackColor ? this.LineSelectedColor : this.site.LineSelectedColor;
-				p.Width = 2F;
+				p.Width = this.site.LineMouseWidth;
 			}
 			else if (hovered)
 			{
 				p.Color = UseBackColor ? this.LineHoveredColor : this.site.LineHoveredColor;
-				p.Width = 2F;
+				p.Width = this.site.LineMouseWidth;
 			}
 
 			Connectors[0].Paint(g);
 			for (int i = 1; i < Connectors.Count - 1; i++)
 			{
 				g.DrawLine(p,
-					Connectors[i - 1].Point.X + this.site.ViewOriginPoint.GetPoint().X,
-					Connectors[i - 1].Point.Y + this.site.ViewOriginPoint.GetPoint().Y,
-					Connectors[i].Point.X + this.site.ViewOriginPoint.GetPoint().X,
-					Connectors[i].Point.Y + this.site.ViewOriginPoint.GetPoint().Y);
+					Connectors[i - 1].X + this.site.ViewOriginPoint.GetPoint().X,
+					Connectors[i - 1].Y + this.site.ViewOriginPoint.GetPoint().Y,
+					Connectors[i].X + this.site.ViewOriginPoint.GetPoint().X,
+					Connectors[i].Y + this.site.ViewOriginPoint.GetPoint().Y);
 				Connectors[i].Paint(g);
 			}
 
 			Connectors[Connectors.Count - 1].Paint(g);
-			p.CustomEndCap = new AdjustableArrowCap(p.Width * 5, p.Width * 5, true);
+			p.CustomEndCap = new AdjustableArrowCap(5, 5, true);
 			g.DrawLine(p,
-				Connectors[Connectors.Count - 2].Point.X + this.site.ViewOriginPoint.GetPoint().X,
-				Connectors[Connectors.Count - 2].Point.Y + this.site.ViewOriginPoint.GetPoint().Y,
-				Connectors[Connectors.Count - 1].Point.X + this.site.ViewOriginPoint.GetPoint().X,
-				Connectors[Connectors.Count - 1].Point.Y + this.site.ViewOriginPoint.GetPoint().Y);
+				Connectors[Connectors.Count - 2].X + this.site.ViewOriginPoint.GetPoint().X,
+				Connectors[Connectors.Count - 2].Y + this.site.ViewOriginPoint.GetPoint().Y,
+				Connectors[Connectors.Count - 1].X + this.site.ViewOriginPoint.GetPoint().X,
+				Connectors[Connectors.Count - 1].Y + this.site.ViewOriginPoint.GetPoint().Y);
 		}
 		/// <summary>
 		/// Invalidates the connection

@@ -93,10 +93,6 @@
       <Project>{cd0237ea-b30a-4082-bf9e-02ebecd1bda7}</Project>
       <Name>FastAutomationFrame.Diagram</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Shapes\BasicsShape\BasicsShape.csproj">
-      <Project>{480174c3-8830-4284-a44b-ff9aa7a64958}</Project>
-      <Name>BasicsShape</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

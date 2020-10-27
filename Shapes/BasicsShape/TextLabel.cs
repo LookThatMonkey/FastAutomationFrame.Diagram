@@ -62,37 +62,49 @@ namespace BasicsShape
 		/// <param name="g"></param>
 		public override void Paint(System.Drawing.Graphics g)
 		{
+			if (this.HideItem) return;
 			g.SmoothingMode = SmoothingMode.AntiAlias;
-			Brush brush = new SolidBrush(BackGroundColor);
-			g.FillRectangle(brush,
+			if (Image != null)
+			{
+				g.DrawImage(Image,
 					rectangle.X + this.site.ViewOriginPoint.GetPoint().X,
 					rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y,
-					this.Width,
-					this.Height);
+						rectangle.Width,
+						rectangle.Height); //在窗口的画布中绘画出内存中的图像
+			}
+			else
+			{
+				Brush brush = new SolidBrush(BackGroundColor);
+				g.FillRectangle(brush,
+						rectangle.X + this.site.ViewOriginPoint.GetPoint().X,
+						rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y,
+						rectangle.Width,
+						rectangle.Height);
+			}
 
 			if (hovered || isSelected)
 			{
-				Pen p = new Pen(BoderSelectedColor, 2F);
+				Pen p = new Pen(BorderSelectedColor, 2F);
 				p.StartCap = LineCap.Round;
 				p.EndCap = LineCap.Round;
 				p.LineJoin = LineJoin.Round;
 				g.DrawRectangle(p,
 					rectangle.X + this.site.ViewOriginPoint.GetPoint().X,
 					rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y,
-					this.Width,
-					this.Height);
+					rectangle.Width,
+					rectangle.Height);
 			}
 			else if (ShowBorder)
 			{
-				Pen p = new Pen(BoderColor);
+				Pen p = new Pen(BorderColor);
 				p.StartCap = LineCap.Round;
 				p.EndCap = LineCap.Round;
 				p.LineJoin = LineJoin.Round;
 				g.DrawRectangle(p,
 					rectangle.X + this.site.ViewOriginPoint.GetPoint().X,
 					rectangle.Y + this.site.ViewOriginPoint.GetPoint().Y,
-					this.Width,
-					this.Height);
+					rectangle.Width,
+					rectangle.Height);
 			}
 
 			if (text != string.Empty)

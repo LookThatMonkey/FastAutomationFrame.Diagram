@@ -11,6 +11,7 @@
 //======================================================================
 
 using FastAutomationFrame.Diagram.Collections;
+using FastAutomationFrame.Diagram.PropertyGrid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,6 +24,17 @@ namespace FastAutomationFrame.Diagram
 {
 	public class ShapeBase : Entity
 	{
+
+		#region Events
+
+		public event EventHandler<EventArgs> ViewSizeChanged;
+		private void OnViewSizeChanged()
+		{
+			ViewSizeChanged?.Invoke(this, EventArgs.Empty);
+		}
+
+		#endregion
+
 		#region Fields
 
 		private int _borderLength = 20;
@@ -48,6 +60,27 @@ namespace FastAutomationFrame.Diagram
 
 		#region Properties
 
+		[Browsable(false)]
+		public Connector BottomConnector => cBottom;
+
+		[Browsable(false)]
+		public Connector LeftConnector => cLeft;
+
+		[Browsable(false)]
+		public Connector RightConnector => cRight;
+
+		[Browsable(false)]
+		public Connector TopConnector => cTop;
+
+		protected Bitmap _image = null;
+
+		[Browsable(true), Description("显示图片"), Category("Layout")]
+		public Bitmap Image
+		{
+			get { return _image; }
+			set { _image = value; }
+		}
+
 		protected bool enableBottomSourceConnector = true;
 
 		[Browsable(true), Description("显示底部源点"), Category("Layout")]
@@ -64,6 +97,15 @@ namespace FastAutomationFrame.Diagram
 		{
 			get { return enableLeftSourceConnector; }
 			set { enableLeftSourceConnector = value; }
+		}
+
+		protected string group = "";
+
+		[Browsable(true), Description("组号"), Category("Layout")]
+		public string Group
+		{
+			get { return group; }
+			set { group = value; }
 		}
 
 		protected bool enableRightSourceConnector = true;
@@ -120,6 +162,25 @@ namespace FastAutomationFrame.Diagram
 			set { enableTopTargetConnector = value; }
 		}
 
+		protected string content = "";
+
+		[Browsable(true), Description("内容"), Category("Layout")]
+		[TypeConverter(typeof(CustomConentConverter)), EditorAttribute(typeof(CustomEditor), typeof(System.Drawing.Design.UITypeEditor))]
+		public string Content
+		{
+			get { return content; }
+			set { content = value; }
+		}
+
+		protected TextPosition textPosition = TextPosition.Center;
+
+		[Browsable(true), Description("文本位置"), Category("Layout")]
+		public TextPosition TextPosition
+		{
+			get { return textPosition; }
+			set { textPosition = value; this.Invalidate(); }
+		}
+
 		[Browsable(false)]
 		public virtual string ShapeName => "ShapeBase";
 
@@ -136,27 +197,38 @@ namespace FastAutomationFrame.Diagram
 			set { connectors = value; }
 		}
 
-		[Browsable(false)]
-		public double Scale = 1;
+		private double scale = 1;
+		[Browsable(true), Description("缩放"), Category("Layout")]
+		public double Scale
+		{
+			get { return scale; }
+			set 
+			{ 
+				scale = value;
+				Resize();
+			}
+		}
 
+		private int width = 100;
 		/// <summary>
 		/// Gets or sets the width of the shape
 		/// </summary>
 		[Browsable(true), Description("宽度"), Category("Layout")]
 		public int Width
 		{
-			get { return (int)(this.rectangle.Width * Scale); }
-			set { Resize(value, this.Height); }
+			get { return width; }
+			set { width = value; Resize(); }
 		}
 
+		private int height = 70;
 		/// <summary>
 		/// Gets or sets the height of the shape
 		/// </summary>		
 		[Browsable(true), Description("高度"), Category("Layout")]
 		public int Height
 		{
-			get { return (int)(this.rectangle.Height * Scale); }
-			set { Resize(this.Width, value); }
+			get { return height; }
+			set { height = value; Resize(); }
 		}
 
 		/// <summary>
@@ -178,7 +250,7 @@ namespace FastAutomationFrame.Diagram
 			get { return rectangle.X; }
 			set
 			{
-				Point p = new Point(value - rectangle.X, rectangle.Y);
+				Point p = new Point(value - rectangle.X, 0);
 				this.Move(p);
 
 				if (Site != null)
@@ -195,7 +267,7 @@ namespace FastAutomationFrame.Diagram
 			get { return rectangle.Y; }
 			set
 			{
-				Point p = new Point(rectangle.X, value - rectangle.Y);
+				Point p = new Point(0, value - rectangle.Y);
 				this.Move(p);
 
 				if (Site != null)
@@ -227,7 +299,7 @@ namespace FastAutomationFrame.Diagram
 
 		protected Color borderColor = Color.Black;
 		[Browsable(true), Description("边框颜色"), Category("Layout")]
-		public Color BoderColor
+		public Color BorderColor
 		{
 			get { return borderColor; }
 			set { borderColor = value; Invalidate(); }
@@ -235,7 +307,7 @@ namespace FastAutomationFrame.Diagram
 
 		protected Color borderSelectedColor = Color.GreenYellow;
 		[Browsable(true), Description("边框选中后颜色"), Category("Layout")]
-		public Color BoderSelectedColor
+		public Color BorderSelectedColor
 		{
 			get { return borderSelectedColor; }
 			set { borderSelectedColor = value; Invalidate(); }
@@ -257,6 +329,17 @@ namespace FastAutomationFrame.Diagram
 				this.Move(p);
 			}
 		}
+
+		#endregion
+
+		#region Events
+
+		[Browsable(true), Description("单击事件"), Category("Layout")]
+		public event EventHandler<EventArgs> Click;
+
+		[Browsable(true)]
+		[Description("双击事件")]
+		public event EventHandler<EventArgs> DoubleClick;
 
 		#endregion
 
@@ -282,32 +365,58 @@ namespace FastAutomationFrame.Diagram
 
 		#region Methods
 
+		internal void ClickMethod()
+		{
+			Click?.Invoke(this, EventArgs.Empty);
+		}
+
+		internal void DoubleClickMethod()
+		{
+			DoubleClick?.Invoke(this, EventArgs.Empty);
+		}
+
 		protected override void SiteChanged()
 		{
 			connectors.Remove(cBottom);
 			cBottom = new Connector(new Point((int)(rectangle.Left + rectangle.Width / 2), rectangle.Bottom));
+			cBottom.ContainEntity = this;
+			cBottom.ConnectorsIndexOfContainEntity = connectors.Count;
 			cBottom.Site = this.site;
+			cBottom.OwnerID = this.ObjectID;
+			cBottom.Index = connectors.Count;
 			cBottom.Name = "Bottom connector";
 			cBottom.ConnectorDirection = ConnectorDirection.Down;
 			connectors.Add(cBottom);
 
 			connectors.Remove(cLeft);
 			cLeft = new Connector(new Point(rectangle.Left, (int)(rectangle.Top + rectangle.Height / 2)));
+			cLeft.ContainEntity = this;
+			cLeft.ConnectorsIndexOfContainEntity = connectors.Count;
 			cLeft.Site = this.site;
+			cLeft.OwnerID = this.ObjectID;
+			cLeft.Index = connectors.Count;
 			cLeft.Name = "Left connector";
 			cLeft.ConnectorDirection = ConnectorDirection.Left;
 			connectors.Add(cLeft);
 
 			connectors.Remove(cRight);
 			cRight = new Connector(new Point(rectangle.Right, (int)(rectangle.Top + rectangle.Height / 2)));
+			cRight.ContainEntity = this;
+			cRight.ConnectorsIndexOfContainEntity = connectors.Count;
 			cRight.Site = this.site;
+			cRight.OwnerID = this.ObjectID;
+			cRight.Index = connectors.Count;
 			cRight.Name = "Right connector";
 			cRight.ConnectorDirection = ConnectorDirection.Right;
 			connectors.Add(cRight);
 
 			connectors.Remove(cTop);
 			cTop = new Connector(new Point((int)(rectangle.Left + rectangle.Width / 2), rectangle.Top));
+			cTop.ContainEntity = this;
+			cTop.ConnectorsIndexOfContainEntity = connectors.Count;
 			cTop.Site = this.site;
+			cTop.OwnerID = this.ObjectID;
+			cTop.Index = connectors.Count;
 			cTop.Name = "Top connector";
 			cTop.ConnectorDirection = ConnectorDirection.Up;
 			connectors.Add(cTop);
@@ -494,6 +603,7 @@ namespace FastAutomationFrame.Diagram
 		/// <param name="g">a graphics object onto which to paint</param>
 		public override void Paint(System.Drawing.Graphics g)
 		{
+
 			Point point = new Point(0, 0);
 			if (this.site != null)
 				point = this.site.ViewOriginPoint.GetPoint();
@@ -503,7 +613,7 @@ namespace FastAutomationFrame.Diagram
 				Point point1, point2, point3;
 				Point[] pntArr;
 
-				if (EnableTopSourceConnector)
+				if (EnableTopSourceConnector && this.site.EnableEdit)
 				{
 					#region 上连接点
 
@@ -525,7 +635,7 @@ namespace FastAutomationFrame.Diagram
 					#endregion
 				}
 
-				if (EnableBottomSourceConnector)
+				if (EnableBottomSourceConnector && this.site.EnableEdit)
 				{
 					#region 下连接点
 
@@ -547,7 +657,7 @@ namespace FastAutomationFrame.Diagram
 					#endregion
 				}
 
-				if (EnableRightSourceConnector)
+				if (EnableRightSourceConnector && this.site.EnableEdit)
 				{
 					#region 右连接点
 
@@ -569,7 +679,7 @@ namespace FastAutomationFrame.Diagram
 					#endregion
 				}
 
-				if (EnableLeftSourceConnector)
+				if (EnableLeftSourceConnector && this.site.EnableEdit)
 				{
 					#region 左连接点
 
@@ -602,7 +712,17 @@ namespace FastAutomationFrame.Diagram
 				StringFormat stringFormat = new StringFormat();
 				stringFormat.LineAlignment = StringAlignment.Center;
 				stringFormat.Alignment = StringAlignment.Center;
-				Rectangle rectangle = new Rectangle(this.rectangle.X + point.X, this.rectangle.Y + point.Y, this.rectangle.Width, this.rectangle.Height);
+				Rectangle rectangle = new Rectangle(this.rectangle.X - this.rectangle.Width / 2 + point.X, this.rectangle.Y + point.Y, this.rectangle.Width * 2, this.rectangle.Height);
+
+				if (textPosition == TextPosition.Top)
+				{
+					rectangle = new Rectangle(this.rectangle.X - this.rectangle.Width / 2 + point.X, this.rectangle.Y + point.Y - this.rectangle.Height + 10, this.rectangle.Width * 2, this.rectangle.Height);
+				}
+				else if (textPosition == TextPosition.Bottom)
+				{
+					rectangle = new Rectangle(this.rectangle.X - this.rectangle.Width / 2 + point.X, this.rectangle.Y + point.Y + this.rectangle.Height - 10, this.rectangle.Width * 2, this.rectangle.Height);
+				}
+
 				g.DrawString(text, font, Brushes.Black, rectangle, stringFormat);
 			}
 		}
@@ -640,8 +760,6 @@ namespace FastAutomationFrame.Diagram
 			site.Invalidate(r);
 		}
 
-
-
 		/// <summary>
 		/// Moves the shape with the given shift
 		/// </summary>
@@ -662,11 +780,10 @@ namespace FastAutomationFrame.Diagram
 		/// </summary>
 		/// <param name="width"></param>
 		/// <param name="height"></param>
-		public virtual void Resize(int width, int height)
+		public virtual void Resize()
 		{
-			this.rectangle.Height = height;
-			this.rectangle.Width = width;
-
+			rectangle.Width = (int)(this.Width * this.scale);
+			rectangle.Height = (int)(this.Height * this.scale);
 			if (cBottom != null)
 				cBottom.Point = new Point((int)(rectangle.Left + rectangle.Width / 2), rectangle.Bottom);
 			if (cLeft != null)
@@ -675,10 +792,20 @@ namespace FastAutomationFrame.Diagram
 				cRight.Point = new Point(rectangle.Right, (int)(rectangle.Top + rectangle.Height / 2));
 			if (cTop != null)
 				cTop.Point = new Point((int)(rectangle.Left + rectangle.Width / 2), rectangle.Top);
+
+			OnViewSizeChanged();
 			Invalidate();
 		}
 
 
 		#endregion
+	}
+
+	public enum TextPosition
+	{
+		Top,
+		Bottom,
+		Center
+
 	}
 }

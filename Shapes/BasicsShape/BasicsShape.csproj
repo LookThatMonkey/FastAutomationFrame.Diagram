@@ -45,9 +45,15 @@
   <ItemGroup>
     <Compile Include="Circle.cs" />
     <Compile Include="Diamond.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="OvalShape.cs" />
     <Compile Include="Parallelogram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Rapezoid.cs" />
     <Compile Include="RoundRenctangle.cs" />
     <Compile Include="SimpleRectangle.cs" />
@@ -60,6 +66,15 @@
       <Name>FastAutomationFrame.Diagram</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\城市.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
